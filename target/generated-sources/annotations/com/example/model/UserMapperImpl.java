@@ -1,12 +1,14 @@
 package com.example.model;
 
 import javax.annotation.processing.Generated;
+import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-09-03T19:27:58+0300",
+    date = "2024-09-08T20:10:37+0300",
     comments = "version: 1.6.0, compiler: javac, environment: Java 17.0.12 (Oracle Corporation)"
 )
+@Component
 public class UserMapperImpl implements UserMapper {
 
     @Override
@@ -16,10 +18,6 @@ public class UserMapperImpl implements UserMapper {
         }
 
         UserDTO userDTO = new UserDTO();
-
-        userDTO.setId( user.getId() );
-        userDTO.setUsername( user.getUsername() );
-        userDTO.setEmail( user.getEmail() );
 
         return userDTO;
     }
@@ -31,10 +29,6 @@ public class UserMapperImpl implements UserMapper {
         }
 
         User user = new User();
-
-        user.setId( userDTO.getId() );
-        user.setUsername( userDTO.getUsername() );
-        user.setEmail( userDTO.getEmail() );
 
         return user;
     }

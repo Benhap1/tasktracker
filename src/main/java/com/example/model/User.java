@@ -1,8 +1,12 @@
 package com.example.model;
 
+import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import java.util.Set;
 
+@Data
 @Document(collection = "users")
 public class User {
     @Id
@@ -10,28 +14,10 @@ public class User {
     private String username;
     private String email;
 
-    public String getId() {
-        return id;
-    }
+    private String password;
 
-    public void setId(String id) {
-        this.id = id;
-    }
+    @Field("roles")
+    private Set<RoleType> roles;
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
 }

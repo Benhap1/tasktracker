@@ -3,17 +3,18 @@ package com.example.service;
 import com.example.model.User;
 import com.example.model.UserDTO;
 import com.example.repository.UserRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @Override
     public Flux<UserDTO> findAll() {
@@ -29,7 +30,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Mono<UserDTO> create(UserDTO userDTO) {
-        return userRepository.save(toEntity(userDTO))
+        User user = toEntity(userDTO);
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword())); // Шифруем пароль
+        return userRepository.save(user)
                 .map(this::toDTO);
     }
 
@@ -50,7 +53,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private UserDTO toDTO(User user) {
-        return new UserDTO(user.getId(), user.getUsername(), user.getEmail());
+        return new UserDTO(user.getId(), user.getUsername(), user.getEmail(),user.getPassword(), user.getRoles());
     }
 
     private User toEntity(UserDTO userDTO) {
@@ -58,6 +61,7 @@ public class UserServiceImpl implements UserService {
         user.setId(userDTO.getId());
         user.setUsername(userDTO.getUsername());
         user.setEmail(userDTO.getEmail());
+        user.setRoles(userDTO.getRoles());
         return user;
     }
 }
