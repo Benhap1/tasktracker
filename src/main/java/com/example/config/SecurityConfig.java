@@ -41,7 +41,7 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.DELETE, "/tasks/**").hasAuthority("ROLE_MANAGER")
                         .anyExchange().authenticated()
                 )
-                .httpBasic(Customizer.withDefaults()) // Поддержка Basic Authentication
+                .httpBasic(Customizer.withDefaults())
                 .build();
     }
 
