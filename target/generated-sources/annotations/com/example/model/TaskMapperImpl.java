@@ -1,14 +1,12 @@
 package com.example.model;
 
-import java.time.Instant;
-import java.util.Set;
 import javax.annotation.processing.Generated;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-09-13T18:15:22+0300",
+    date = "2024-09-14T13:37:54+0300",
     comments = "version: 1.6.0, compiler: javac, environment: Java 17.0.12 (Oracle Corporation)"
 )
 @Component
@@ -23,27 +21,17 @@ public class TaskMapperImpl implements TaskMapper {
             return null;
         }
 
-        UserDTO author = null;
-        UserDTO assignee = null;
-        Set<UserDTO> observers = null;
-        String id = null;
-        String name = null;
-        String description = null;
-        Instant createdAt = null;
-        Instant updatedAt = null;
-        TaskStatus status = null;
+        TaskDTO taskDTO = new TaskDTO();
 
-        author = userMapper.toDTO( task.getAuthor() );
-        assignee = userMapper.toDTO( task.getAssignee() );
-        observers = userMapper.toDTO( task.getObservers() );
-        id = task.getId();
-        name = task.getName();
-        description = task.getDescription();
-        createdAt = task.getCreatedAt();
-        updatedAt = task.getUpdatedAt();
-        status = task.getStatus();
-
-        TaskDTO taskDTO = new TaskDTO( id, name, description, createdAt, updatedAt, status, author, assignee, observers );
+        taskDTO.setAuthor( userMapper.toDTO( task.getAuthor() ) );
+        taskDTO.setAssignee( userMapper.toDTO( task.getAssignee() ) );
+        taskDTO.setObservers( userMapper.toDTO( task.getObservers() ) );
+        taskDTO.setId( task.getId() );
+        taskDTO.setName( task.getName() );
+        taskDTO.setDescription( task.getDescription() );
+        taskDTO.setCreatedAt( task.getCreatedAt() );
+        taskDTO.setUpdatedAt( task.getUpdatedAt() );
+        taskDTO.setStatus( task.getStatus() );
 
         return taskDTO;
     }

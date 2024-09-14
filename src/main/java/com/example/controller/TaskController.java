@@ -56,14 +56,17 @@ public class TaskController {
         return taskService.update(id, taskDTO);
     }
 
+
     @PreAuthorize("hasAuthority('ROLE_USER') or hasAuthority('ROLE_MANAGER')")
     @Operation(summary = "Add observer to task", description = "Add an observer to a task")
     @ApiResponse(responseCode = "200", description = "Observer added successfully", content = @Content(schema = @Schema(implementation = TaskDTO.class)))
     @ApiResponse(responseCode = "404", description = "Task or observer not found")
-    @PostMapping("/{id}/addObserver/{observerId}")
-    public Mono<TaskDTO> addObserver(@PathVariable String id, @PathVariable String observerId) {
-        return taskService.addObserver(id, observerId);
+    @PostMapping("/{id}/addObserver/{username}")
+    public Mono<TaskDTO> addObserver(@PathVariable String id, @PathVariable String username) {
+        return taskService.addObserver(id, username);
     }
+
+
 
     @PreAuthorize("hasAuthority('ROLE_MANAGER')")
     @Operation(summary = "Delete a task", description = "Delete a task by its ID")

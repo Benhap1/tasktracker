@@ -15,6 +15,11 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Override
+    public Mono<UserDTO> findByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .map(this::toDTO);
+    }
 
     @Override
     public Flux<UserDTO> findAll() {

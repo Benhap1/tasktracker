@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.exceptions.NotFoundException;
 import com.example.model.Task;
 import com.example.model.TaskDTO;
 import com.example.model.TaskMapper;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -21,6 +23,8 @@ import java.util.stream.Collectors;
 public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
     private final TaskMapper taskMapper;
+
+    private final UserServiceImpl userServiceImpl;
 
     @Override
     public Flux<TaskDTO> findAll() {
@@ -75,21 +79,35 @@ public class TaskServiceImpl implements TaskService {
 
 
     @Override
-    public Mono<TaskDTO> addObserver(String taskId, String observerId) {
+    public Mono<TaskDTO> addObserver(String taskId, String username) {
         return getCurrentUserRoles()
                 .flatMap(roles -> {
                     if (roles.contains("ROLE_USER") || roles.contains("ROLE_MANAGER")) {
-                        return taskRepository.findById(taskId)
-                                .flatMap(task -> {
-                                    task.getObserverIds().add(observerId);
-                                    return taskRepository.save(task);
-                                })
-                                .map(taskMapper::toDTO);
+                        return userServiceImpl.findByUsername(username)
+                                .switchIfEmpty(Mono.error(new NotFoundException("User not found")))
+                                .flatMap(user -> {
+                                    return taskRepository.findById(taskId)
+                                            .switchIfEmpty(Mono.error(new NotFoundException("Task not found")))
+                                            .flatMap(task -> {
+                                                // Проверка на null перед добавлением
+                                                if (task.getObserverIds() == null) {
+                                                    task.setObserverIds(new HashSet<>());
+                                                }
+                                                task.getObserverIds().add(user.getId());
+                                                return taskRepository.save(task)
+                                                        .map(taskMapper::toDTO);
+                                            });
+                                });
                     } else {
                         return Mono.error(new SecurityException("Access Denied: Insufficient permissions"));
                     }
                 });
     }
+
+
+
+
+
 
     @Override
     public Mono<Void> deleteById(String id) {

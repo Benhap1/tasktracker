@@ -2,6 +2,7 @@ package com.example.model;
 
 import lombok.Data;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -14,8 +15,9 @@ public class UserDTO {
 
     private Set<RoleType> roles;
 
-    public UserDTO() {}
-
+    public UserDTO() {
+        this.roles = new HashSet<>();  // Инициализация пустого множества
+    }
 
     public UserDTO(String id, String username, String email, String password, Set<RoleType> roles) {
         this.id = id;

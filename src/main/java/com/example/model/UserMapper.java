@@ -3,6 +3,7 @@ package com.example.model;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -15,13 +16,14 @@ public interface UserMapper {
 
 
     default Set<UserDTO> toDTO(Set<User> users) {
-        return users.stream()
+        return users == null ? Collections.emptySet() : users.stream()
                 .map(this::toDTO)
                 .collect(Collectors.toSet());
     }
 
+
     default Set<User> toEntity(Set<UserDTO> userDTOs) {
-        return userDTOs.stream()
+        return userDTOs == null ? Collections.emptySet() : userDTOs.stream()
                 .map(this::toEntity)
                 .collect(Collectors.toSet());
     }

@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Set;
 
 @Document(collection = "tasks")
@@ -24,7 +25,7 @@ public class Task {
     @ReadOnlyProperty
     private User assignee;
     @ReadOnlyProperty
-    private Set<User> observers;
+    private Set<User> observers = new HashSet<>();;
 
     public String getId() {
         return id;

@@ -5,6 +5,8 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
+import java.util.Collections;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -29,14 +31,18 @@ public interface TaskMapper {
 
 
     default Set<TaskDTO> toDTO(Set<Task> tasks) {
-        return tasks.stream()
+        return tasks == null ? Collections.emptySet() : tasks.stream()
                 .map(this::toDTO)
                 .collect(Collectors.toSet());
     }
 
+
     default Set<Task> toEntity(Set<TaskDTO> taskDTOs) {
-        return taskDTOs.stream()
+        return taskDTOs == null ? Collections.emptySet() : taskDTOs.stream()
                 .map(this::toEntity)
                 .collect(Collectors.toSet());
     }
 }
+
+
+

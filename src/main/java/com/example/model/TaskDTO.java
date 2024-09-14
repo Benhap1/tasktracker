@@ -1,6 +1,7 @@
 package com.example.model;
 
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Set;
 
 public class TaskDTO {
@@ -12,7 +13,7 @@ public class TaskDTO {
     private TaskStatus status;
     private UserDTO author;
     private UserDTO assignee;
-    private Set<UserDTO> observers;
+    private Set<UserDTO> observers = new HashSet<>();
 
     public TaskDTO(String id, String name, String description, Instant createdAt, Instant updatedAt, TaskStatus status, UserDTO author, UserDTO assignee, Set<UserDTO> observers) {
         this.id = id;
@@ -24,6 +25,10 @@ public class TaskDTO {
         this.author = author;
         this.assignee = assignee;
         this.observers = observers;
+    }
+
+    public TaskDTO() {
+
     }
 
     public String getId() {
